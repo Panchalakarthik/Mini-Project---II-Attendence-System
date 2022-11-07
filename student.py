@@ -4,26 +4,19 @@ from PIL import Image,ImageTk
 from tkinter import messagebox
 import mysql.connector
 import cv2
-import customtkinter
-import tkinter.messagebox
-import customtkinter
-
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("blue") 
-
 # Testing Connection 
+"""
+conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
+cursor = conn.cursor()
 
-# conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
-# cursor = conn.cursor()
+cursor.execute("show databases")
 
-# cursor.execute("show databases")
+data = cursor.fetchall()
 
-# data = cursor.fetchall()
+print(data)
 
-# print(data)
-
-# conn.close()
-
+conn.close()
+"""
 class Student:
     def __init__(self,root):
         self.root=root
@@ -88,7 +81,7 @@ class Student:
 
         #combo box 
         dep_combo=ttk.Combobox(current_course_frame,textvariable=self.var_dep,width=15,font=("verdana",12,"bold"),state="readonly")
-        dep_combo["values"]=("Select Department","CSE","ECE","IT","CIVEL","MECH")
+        dep_combo["values"]=("Select Department","CSE","ECE","IT","CHEMICAL","MECH","CIVEL")
         dep_combo.current(0)
         dep_combo.grid(row=0,column=1,padx=5,pady=15,sticky=W)
 
@@ -112,7 +105,7 @@ class Student:
 
         #combo box 
         year_combo=ttk.Combobox(current_course_frame,textvariable=self.var_year,width=15,font=("verdana",12,"bold"),state="readonly")
-        year_combo["values"]=("Select Year","First Year","Second Year ","Third Year","Fourth ")
+        year_combo["values"]=("Select Year","First Year","Second Year","Third Year","Fourth Year")
         year_combo.current(0)
         year_combo.grid(row=1,column=1,padx=5,pady=15,sticky=W)
 
@@ -171,11 +164,6 @@ class Student:
         gender_combo["values"]=("Male","Female","Others")
         gender_combo.current(0)
         gender_combo.grid(row=2,column=1,padx=5,pady=5,sticky=W)
-
-        # gender_combo = ttk.customtkinter.CTkComboBox(class_Student_frame,textvariable=self.var_gender,width=13,font=("verdana",12,"bold"),state="readonly",
-        #                                             values=["Male","Female","Others"])
-        # gender_combo.current(0)
-        # gender_combo.grid(row=2,column=1,padx=5,pady=5, sticky="we")
 
         #Date of Birth
         student_dob_label = Label(class_Student_frame,text="DOB:",font=("verdana",12,"bold"),fg="navyblue",bg="white")
@@ -245,10 +233,8 @@ class Student:
         take_photo_btn.grid(row=0,column=4,padx=5,pady=10,sticky=W)
 
         #update photo button
-
-       
-        # update_photo_btn=Button(btn_frame,text="Update Pic",width=9,font=("verdana",12,"bold"),fg="white",bg="navyblue")
-        # update_photo_btn.grid(row=0,column=5,padx=5,pady=10,sticky=W)
+        update_photo_btn=Button(btn_frame,text="Update Pic",width=9,font=("verdana",12,"bold"),fg="white",bg="navyblue")
+        update_photo_btn.grid(row=0,column=5,padx=5,pady=10,sticky=W)
 
 
 
@@ -346,7 +332,7 @@ class Student:
             messagebox.showerror("Error","Please Fill All Fields are Required!",parent=self.root)
         else:
             try:
-                conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                 mycursor = conn.cursor()
                 mycursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(
                 self.var_std_id.get(),
@@ -354,16 +340,17 @@ class Student:
                 self.var_dep.get(),
                 self.var_course.get(),
                 self.var_year.get(),
-                self.var_semester.get(),
-                self.var_div.get(),
+                self.var_semester.get(), 
                 self.var_gender.get(),
                 self.var_dob.get(),
                 self.var_mob.get(),
                 self.var_address.get(),
                 self.var_roll.get(),
                 self.var_email.get(),
-                self.var_teacher.get(),
-                self.var_radio1.get()
+                self.var_radio1.get(),
+                self.var_div.get(),
+                self.var_teacher.get()
+                
                 ))
 
                 conn.commit()
@@ -376,7 +363,7 @@ class Student:
     # ===========================Fetch data form database to table ================================
 
     def fetch_data(self):
-        conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+        conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
         mycursor = conn.cursor()
 
         mycursor.execute("select * from student")
@@ -395,7 +382,6 @@ class Student:
         cursor_focus = self.student_table.focus()
         content = self.student_table.item(cursor_focus)
         data = content["values"]
-        print("------------------------------------------->",data)
 
         self.var_std_id.set(data[0]),
         self.var_std_name.set(data[1]),
@@ -420,7 +406,7 @@ class Student:
             try:
                 Update=messagebox.askyesno("Update","Do you want to Update this Student Details!",parent=self.root)
                 if Update > 0:
-                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                     mycursor = conn.cursor()
                     mycursor.execute("update student set Name=%s,Department=%s,Course=%s,Year=%s,Semester=%s,Division=%s,Gender=%s,DOB=%s,Mobile_No=%s,Address=%s,Roll_No=%s,Email=%s,Teacher_Name=%s,PhotoSample=%s where Student_ID=%s",( 
                     self.var_std_name.get(),
@@ -457,7 +443,7 @@ class Student:
             try:
                 delete=messagebox.askyesno("Delete","Do you want to Delete?",parent=self.root)
                 if delete>0:
-                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                     mycursor = conn.cursor() 
                     sql="delete from student where Student_ID=%s"
                     val=(self.var_std_id.get(),)
@@ -497,7 +483,7 @@ class Student:
             messagebox.showerror("Error","Select Combo option and enter entry box",parent=self.root)
         else:
             try:
-                conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                 my_cursor = conn.cursor()
                 sql = "SELECT Student_ID,Name,Department,Course,Year,Semester,Division,Gender,DOB,Mobile_No,Address,Roll_No,Email,Teacher_Name,PhotoSample FROM student where Roll_No='" +str(self.var_search.get()) + "'" 
                 my_cursor.execute(sql)
@@ -523,7 +509,7 @@ class Student:
         else:
             try:
                 
-                conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                 mycursor = conn.cursor()
                 mycursor.execute("select * from student")
                 myreslut = mycursor.fetchall()
@@ -555,8 +541,7 @@ class Student:
 
                 # ====================part of opencv=======================
 
-                face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades+"haarcascade_frontalface_default.xml")
-                # CV2 error
+                face_classifier = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
                 def face_croped(img):
                     # conver gary sacle
@@ -575,10 +560,7 @@ class Student:
                         img_id+=1
                         face=cv2.resize(face_croped(my_frame),(200,200))
                         face=cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
-                        
                         file_path="data_img/stdudent."+str(id)+"."+str(img_id)+".jpg"
-                        # print(file_path)
-                        # change error
                         cv2.imwrite(file_path,face)
                         cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)        
                         cv2.imshow("Capture Images",face)

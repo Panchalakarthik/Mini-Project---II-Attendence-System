@@ -69,7 +69,7 @@ class Train:
             ids.append(id)
 
             cv2.imshow("Training",imageNp)
-            cv2.waitKey(1)==113
+            cv2.waitKey(1)==13
         
         ids=np.array(ids)
         

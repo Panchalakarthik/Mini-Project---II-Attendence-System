@@ -122,7 +122,6 @@ class Attendance:
         attend_combo.grid(row=2,column=3,padx=5,pady=5,sticky=W)
 
         # ===============================Table Sql Data View==========================
-
         table_frame = Frame(left_frame,bd=2,bg="white",relief=RIDGE)
         table_frame.place(x=10,y=100,width=635,height=310)
 
@@ -228,17 +227,13 @@ class Attendance:
         self.attendanceReport.pack(fill=BOTH,expand=1)
         self.attendanceReport.bind("<ButtonRelease>",self.get_cursor_right)
         self.fetch_data()
-
     # =================================update for mysql button================
     #Update button
-
         del_btn=Button(right_frame,command=self.update_data,text="Update",width=12,font=("verdana",12,"bold"),fg="white",bg="navyblue")
         del_btn.grid(row=0,column=1,padx=6,pady=10,sticky=W)
-
     #Update button
         del_btn=Button(right_frame,command=self.delete_data,text="Delete",width=12,font=("verdana",12,"bold"),fg="white",bg="navyblue")
         del_btn.grid(row=0,column=2,padx=6,pady=10,sticky=W)
-
     # ===============================update function for mysql database=================
     def update_data(self):
         if self.var_id.get()=="" or self.var_roll.get=="" or self.var_name.get()=="" or self.var_time.get()=="" or self.var_date.get()=="" or self.var_attend.get()=="Status":
@@ -247,7 +242,7 @@ class Attendance:
             try:
                 Update=messagebox.askyesno("Update","Do you want to Update this Student Attendance!",parent=self.root)
                 if Update > 0:
-                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                     mycursor = conn.cursor()
                     mycursor.execute("update stdattendance set std_id=%s,std_roll_no=%s,std_name=%s,std_time=%s,std_date=%s,std_attendance=%s where std_id=%s",( 
                     self.var_id.get(),
@@ -267,7 +262,6 @@ class Attendance:
                 conn.close()
             except Exception as es:
                 messagebox.showerror("Error",f"Due to: {str(es)}",parent=self.root)
-
     # =============================Delete Attendance form my sql============================
     def delete_data(self):
         if self.var_id.get()=="":
@@ -276,7 +270,7 @@ class Attendance:
             try:
                 delete=messagebox.askyesno("Delete","Do you want to Delete?",parent=self.root)
                 if delete>0:
-                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                    conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                     mycursor = conn.cursor() 
                     sql="delete from stdattendance where std_id=%s"
                     val=(self.var_id.get(),)
@@ -294,7 +288,7 @@ class Attendance:
     # ===========================fatch data form mysql attendance===========
 
     def fetch_data(self):
-        conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+        conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
         mycursor = conn.cursor()
 
         mycursor.execute("select * from stdattendance")
@@ -387,7 +381,7 @@ class Attendance:
             messagebox.showerror("Error","Please Fill All Fields are Required!",parent=self.root)
         else:
             try:
-                conn = mysql.connector.connect(user='root', password='',host='localhost',database='min_1',port=3306)
+                conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
                 mycursor = conn.cursor()
                 mycursor.execute("insert into stdattendance values(%s,%s,%s,%s,%s,%s)",(
                 self.var_id.get(),
@@ -410,7 +404,7 @@ class Attendance:
 
 
 
-    #     conn = mysql.connector.connect(user='root', password='root',host='localhost',database='face_recognition',port=3307)
+    #     conn = mysql.connector.connect(user='root', password='',host='localhost',database='face_recognition',port=3306)
     #     mycursor = conn.cursor()
     #     if messagebox.askyesno("Confirmation","Are you sure you want to save attendance on database?"):
     #         for i in mydata:
